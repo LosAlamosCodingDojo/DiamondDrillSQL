@@ -1,0 +1,177 @@
+---
+title: "Diamond Drills"
+output: 
+  ioslides_presentation: 
+    highlight: tango
+    logo: ~/Downloads/Dojo Logo Square for Web-05.jpg
+    transition: faster
+    widescreen: yes
+---
+
+## Problem 1 {.build}
+
+Make a new data set that has the average depth and
+price of the diamonds in the data set.
+
+```sql
+select avg(depth), avg(price) from diamonds;
+```
+
+avg(depth) | avg(price)
+---------- | ----------
+61.7494    | 3932.79972
+
+## Problem 2. {.build}
+
+Add a new column to the data set that records each diamond's price per carat.
+
+```sql
+select *, price/carat as price_per_carat from diamonds;
+```
+
+## Problem 3 {.build}
+
+Make a data set that only includes diamonds with an *Ideal* cut.
+
+```sql
+select * from diamonds where cut = "Ideal";
+```
+
+## Problem 4 {.build}
+
+Create a new data set that groups diamonds by their cut and displays the average
+price of each group.
+
+```sql
+select cut, avg(price) from diamonds group by cut;
+```
+
+## Proble 5 {.build}
+
+Create a new data set that groups diamonds by color and
+displays the average depth and average table for each group.
+
+```sql
+select color, avg(depth) , avg("table") from diamonds group by color;
+```
+
+## Proble 6 {.build}
+
+Add two columns to the diamonds data set. The first column
+should display the average depth of diamonds in the diamond's color
+group. The second column should display the average table of diamonds
+in the diamonds color group.
+
+Hint 0: This problem requires the concepts of *Subquery* and *Join*.
+
+Hint 1: Start with the average depth and average table.
+
+```sql 
+select color, avg(depth) as avg_depth, avg("table") as avg_table
+from diamonds group by color;
+```
+Hint 2: Then append (join) avg_depth and avg_table to diamonds.
+
+```sql
+select *
+from diamonds natural join (
+    select color, avg(depth) as avg_depth, avg("table") as avg_table
+    from diamonds group by color);
+```
+
+## Problem 7 {.build}
+
+Make a data set that contains all of the unique
+combinations of cut, color, and clarity, as well the average
+price of diamonds in each group.
+
+```sql
+select cut, color,  clarity, avg(price) as avg_price
+from diamonds group by cut, color, clarity;
+```
+
+## Problem 8 {.build}
+
+Add a column to the diamonds data set that displays the average price for all 
+diamonds with a diamond's cut, color, and clarity.
+
+Hint 1: This is a combination of Problem 6 and 7.
+
+```sql
+select *
+from diamonds natural join (
+    select cut, color, clarity, avg(price) as avg_price
+    from diamonds group by cut, color, clarity);
+```
+
+## Problem 9 {.build}
+
+Do diamonds with the best cut fetch the
+best price for a given amount of carats?
+
+```sql
+select cut, avg(price/carat) as price_per_carat
+from diamonds
+group by cut;
+```
+
+## Problem 10 {.build}
+
+Which color diamonds seem to be largest on average
+(in terms of carats)?
+
+```sql
+select color, avg(carat) as avg_carat
+from diamonds
+group by color order by avg_carat;
+```
+
+## Problem 11 {.build}
+
+What color of diamonds occurs the most
+frequently among diamonds with ideal cuts?
+
+```sql
+select color, count(*) as counts
+from diamonds
+where cut = "Ideal"
+group by color order by counts;
+```
+
+## Problem 12 {.build}
+
+Which clarity of diamonds has the
+largest average table per carats?
+
+```sql
+select clarity, avg("table"/carat) as table_per_carat
+from diamonds
+group by clarity order by table_per_carat;
+```
+
+## Problem 13 {.build}
+
+Which diamond has the largest price per carat compared other diamonds with its
+cut, color, and clarity?
+
+Hint: I can't correctly solve this.
+
+## Problem 14 {.build}
+
+What is the average price per carat of diamonds that cost more than $10000? 
+
+```sql
+select avg(price/carat) 
+from  diamonds
+where price > 10000;
+```
+
+## Problem 15 {.build}
+
+Display the largest diamond depth observed for each clarity group.
+
+```sql
+select clarity, max(depth)
+from diamonds
+group by clarity;
+```
